@@ -88,7 +88,7 @@ const AppContent: React.FC = () => {
               )}
               
               <img 
-                src="/cash-pouch-icon.svg" 
+                src="/rupee icon.png" 
                 alt="Finance Pouch" 
                 className="w-8 h-8 md:w-10 md:h-10 object-contain"
               />
