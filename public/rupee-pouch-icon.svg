@@ -1,0 +1,110 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Money Pouch Body -->
+  <path d="M50 80 
+           C50 70, 60 60, 70 60
+           L130 60
+           C140 60, 150 70, 150 80
+           L150 140
+           C150 160, 130 180, 100 180
+           C70 180, 50 160, 50 140
+           Z" 
+        fill="#DC2626" 
+        stroke="#7F1D1D" 
+        stroke-width="3"/>
+  
+  <!-- Pouch Opening/Neck -->
+  <ellipse cx="100" cy="60" rx="30" ry="8" 
+           fill="#B91C1C" 
+           stroke="#7F1D1D" 
+           stroke-width="2"/>
+  
+  <!-- Rope/String Closure -->
+  <path d="M70 52
+           C75 45, 85 42, 100 42
+           C115 42, 125 45, 130 52
+           C125 48, 115 46, 100 46
+           C85 46, 75 48, 70 52 Z" 
+        fill="#92400E" 
+        stroke="#451A03" 
+        stroke-width="1.5"/>
+  
+  <!-- Rope Ends -->
+  <circle cx="68" cy="50" r="3" fill="#92400E" stroke="#451A03" stroke-width="1"/>
+  <circle cx="132" cy="50" r="3" fill="#92400E" stroke="#451A03" stroke-width="1"/>
+  
+  <!-- Rope Texture Lines -->
+  <path d="M75 48 L78 46 M82 45 L85 43 M88 44 L91 42" 
+        stroke="#451A03" 
+        stroke-width="1" 
+        stroke-linecap="round"/>
+  <path d="M109 42 L112 44 M115 43 L118 45 M122 46 L125 48" 
+        stroke="#451A03" 
+        stroke-width="1" 
+        stroke-linecap="round"/>
+  
+  <!-- Rupee Symbol (₹) -->
+  <g transform="translate(100, 120)">
+    <!-- Main vertical line -->
+    <path d="M-8 -25 L-8 25" 
+          stroke="#FCD34D" 
+          stroke-width="6" 
+          stroke-linecap="round"/>
+    
+    <!-- Top horizontal line -->
+    <path d="M-8 -25 L8 -25 C12 -25, 15 -22, 15 -18 C15 -14, 12 -11, 8 -11 L-2 -11" 
+          stroke="#FCD34D" 
+          stroke-width="6" 
+          stroke-linecap="round" 
+          fill="none"/>
+    
+    <!-- Middle horizontal line -->
+    <path d="M-8 -11 L5 -11" 
+          stroke="#FCD34D" 
+          stroke-width="6" 
+          stroke-linecap="round"/>
+    
+    <!-- Diagonal line -->
+    <path d="M5 -11 L15 25" 
+          stroke="#FCD34D" 
+          stroke-width="6" 
+          stroke-linecap="round"/>
+    
+    <!-- Top double line -->
+    <path d="M-15 -35 L20 -35 M-15 -32 L20 -32" 
+          stroke="#FCD34D" 
+          stroke-width="3" 
+          stroke-linecap="round"/>
+  </g>
+  
+  <!-- Pouch Highlight/Shine -->
+  <ellipse cx="85" cy="95" rx="12" ry="20" 
+           fill="#EF4444" 
+           opacity="0.6"/>
+  
+  <!-- Pouch Shadow/Depth -->
+  <path d="M50 140
+           C50 155, 65 170, 85 175
+           C90 176, 95 177, 100 177
+           L100 180
+           C70 180, 50 160, 50 140 Z" 
+        fill="#991B1B" 
+        opacity="0.7"/>
+  
+  <!-- Bottom Curve Detail -->
+  <path d="M60 165 C70 175, 85 178, 100 178 C115 178, 130 175, 140 165" 
+        stroke="#7F1D1D" 
+        stroke-width="2" 
+        fill="none"/>
+  
+  <!-- Side Seam Lines -->
+  <path d="M52 85 C52 90, 52 95, 53 100 C54 110, 55 120, 56 130" 
+        stroke="#7F1D1D" 
+        stroke-width="1.5" 
+        fill="none" 
+        opacity="0.8"/>
+  <path d="M148 85 C148 90, 148 95, 147 100 C146 110, 145 120, 144 130" 
+        stroke="#7F1D1D" 
+        stroke-width="1.5" 
+        fill="none" 
+        opacity="0.8"/>
+</svg>
