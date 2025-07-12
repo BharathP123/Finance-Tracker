@@ -90,7 +90,7 @@ const AppContent: React.FC = () => {
               <img 
                 src="/rupee icon.png" 
                 alt="Finance Pouch" 
-                className="w-8 h-8 md:w-10 md:h-10 object-contain"
+                className="w-8 h-8 md:w-10 md:h-10 object-contain bg-transparent"
               />
               <div>
                 <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Finance Pouch</h1>
