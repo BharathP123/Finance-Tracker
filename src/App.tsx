@@ -71,62 +71,41 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20 md:pb-8 transition-colors duration-200">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 transition-colors duration-200 safe-area-top">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 md:h-16">
-            {/* Left side - Logo/Back button */}
-            <div className="flex items-center space-x-3">
-              {/* Back button for mobile when not on home */}
-              {activeTab !== 'home' && canGoBack() && (
-                <button
-                  onClick={handleBackNavigation}
-                  className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 rounded-lg min-h-[44px] min-w-[44px] -ml-2"
-                  title="Go back"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </button>
-              )}
-              
-              <img 
-                src="/Icon.png" 
-                alt="Finance Pouch" 
-                className="w-8 h-8 md:w-10 md:h-10 object-contain"
-              />
-              <div>
-                <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Finance Pouch</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Your smart money companion</p>
-              </div>
-            </div>
-            
-            {/* Right side - Controls */}
-            <div className="flex items-center space-x-2 md:space-x-3">
-              <ThemeToggle />
-              <div className="hidden sm:block">
-                <CurrencySelector />
-              </div>
-              <button
-                onClick={() => setIsHelpGuideOpen(true)}
-                className="p-2 md:flex md:items-center md:space-x-1 md:px-3 md:py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md min-h-[44px] min-w-[44px]"
-                title="How to use Finance Pouch"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                </svg>
-                <span className="hidden sm:inline">Help</span>
-              </button>
-              <button
-                onClick={() => setIsAboutModalOpen(true)}
-                className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 rounded-lg min-h-[44px] min-w-[44px]"
-                title="About Finance Pouch"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </div>
-          </div>
+<header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 transition-colors duration-200 safe-area-top">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-14 md:h-16">
+      {/* Left side - Logo/Back button */}
+      <div className="flex items-center space-x-3">
+        {/* Back button for mobile when not on home */}
+        {activeTab !== 'home' && canGoBack() && (
+          <button
+            onClick={handleBackNavigation}
+            className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 rounded-lg min-h-[44px] min-w-[44px] -ml-2"
+            title="Go back"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+        )}
+        
+        <img 
+          src="/Icon.png" 
+          alt="Finance Pouch" 
+          className="w-8 h-8 md:w-10 md:h-10 object-contain"
+        />
+        <div>
+          <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Finance Pouch</h1>
+          <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Your smart money companion</p>
         </div>
-      </header>
+      </div>
+
+      {/* Right side - Theme Toggle */}
+      <div className="ml-auto">
+        <ThemeToggle />
+      </div>
+    </div>
+  </div>
+</header>
+
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-6">
