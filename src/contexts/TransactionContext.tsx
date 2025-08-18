@@ -184,11 +184,13 @@ const defaultCategories: Category[] = [
   { id: 'healthcare', name: 'Healthcare', type: 'expense', color: 'bg-red-100 text-red-800', isDefault: true },
   { id: 'entertainment', name: 'Entertainment', type: 'expense', color: 'bg-pink-100 text-pink-800', isDefault: true },
   { id: 'other-expense', name: 'Other Expense', type: 'expense', color: 'bg-gray-100 text-gray-800', isDefault: true },
+  { id: 'startup', name: 'Startup', type: 'expense', color: 'bg-green-100 text-green-800', isDefault: true },
 ];
 
 const defaultAccounts: Account[] = [
   { id: 'cash', name: 'Cash', type: 'cash', balance: 0, color: 'bg-green-100 text-green-800', isDefault: true },
   { id: 'savings', name: 'Savings Account', type: 'bank', balance: 0, color: 'bg-purple-100 text-purple-800', isDefault: true },
+   { id: 'UPI', name: 'UPI', type: 'wallet', balance: 0, color: 'bg-purple-100 text-purple-800', isDefault: true },
 ];
 
 const defaultSmartKeywords: SmartKeyword[] = [
