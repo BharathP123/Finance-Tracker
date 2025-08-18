@@ -427,7 +427,6 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
     recurringRules: [],
     savingsGoals: [],
     goalContributions: [],
-    goalContributions: [],
     smartKeywords: defaultSmartKeywords
   });
 

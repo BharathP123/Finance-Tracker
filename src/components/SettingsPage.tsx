@@ -5,6 +5,7 @@ import SavingsGoals from './SavingsGoals';
 import ExportManager from './ExportManager';
 import Tools from './Tools';
 import RecurringTransactions from './RecurringTransactions';
+import MailButton from '../components/MailButton';  // Correct the import for MailButton.tsx
 
 type SettingsTab = 'goals' | 'recurring' | 'export' | 'tools';  // Removed 'accounts'
 
@@ -54,7 +55,7 @@ const SettingsPage: React.FC = () => {
 
       {/* Tab Navigation */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-1 md:p-2 overflow-x-auto">
-        <div className="flex sm:grid sm:grid-cols-4 gap-1 md:gap-2 min-w-max sm:min-w-0"> {/* Changed grid-cols-5 to 4 */}
+        <div className="flex sm:grid sm:grid-cols-4 gap-1 md:gap-2 min-w-max sm:min-w-0">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -79,6 +80,11 @@ const SettingsPage: React.FC = () => {
       {/* Content */}
       <div className="animate-fadeIn">
         {renderContent()}
+      </div>
+
+      {/* Mail Button - Top Right Corner, Below Header */}
+      <div className="fixed top-10 right-5 z-50"> {/* Adjust top to position just below the header */}
+        <MailButton />
       </div>
     </div>
   );
