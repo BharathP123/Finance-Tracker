@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { Target, Download, Calculator, RotateCcw } from 'lucide-react';
+import { Target, Download, Calculator, RotateCcw } from 'lucide-react';  // Removed Wallet (Accounts)
 import CurrencySelector from './CurrencySelector';
 import SavingsGoals from './SavingsGoals';
 import ExportManager from './ExportManager';
 import Tools from './Tools';
 import RecurringTransactions from './RecurringTransactions';
-import MailButton from '../components/MailButton';  // Import the MailButton component
+import MailButton from '../components/MailButton';  // Correct the import for MailButton.tsx
 
-type SettingsTab = 'goals' | 'recurring' | 'export' | 'tools';
+type SettingsTab = 'goals' | 'recurring' | 'export' | 'tools';  // Removed 'accounts'
 
 const SettingsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<SettingsTab>('goals');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('goals');  // Default to 'goals'
 
   const tabs = [
     { id: 'goals' as const, name: 'Goals', icon: Target },
     { id: 'recurring' as const, name: 'Recurring', icon: RotateCcw },
     { id: 'export' as const, name: 'Export', icon: Download },
     { id: 'tools' as const, name: 'Tools', icon: Calculator },
-  ];
+  ];  // Removed 'accounts' tab
 
   const renderContent = () => {
     switch (activeTab) {
@@ -30,17 +30,19 @@ const SettingsPage: React.FC = () => {
       case 'tools':
         return <Tools />;
       default:
-        return <SavingsGoals />;
+        return <SavingsGoals />;  // Default to 'goals' if no tab is selected
     }
   };
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="text-center py-2">
         <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2">Manage</h1>
         <p className="text-gray-600 dark:text-gray-400">Manage your goals, budgets, and preferences</p>
       </div>
 
+      {/* Mobile Currency Selector */}
       <div className="sm:hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
         <div className="flex items-center justify-between">
           <div>
@@ -51,6 +53,7 @@ const SettingsPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Tab Navigation */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-1 md:p-2 overflow-x-auto">
         <div className="flex sm:grid sm:grid-cols-4 gap-1 md:gap-2 min-w-max sm:min-w-0">
           {tabs.map((tab) => {
@@ -74,12 +77,15 @@ const SettingsPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Content */}
       <div className="animate-fadeIn">
         {renderContent()}
       </div>
 
-      {/* Mail Button - Bottom Left Corner */}
-      <MailButton email="your-email@example.com" /> {/* Provide the email as a prop */}
+      {/* Mail Button - Move up a little */}
+      <div className="fixed bottom-30 left-5 z-50">
+        <MailButton email="your-email@example.com" className="fixed bottom-30 left-5 z-50" />
+      </div>
     </div>
   );
 };

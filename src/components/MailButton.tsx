@@ -11,7 +11,7 @@ const MailButton: React.FC<MailButtonProps> = ({ email }) => {
       href={`mailto:${email}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-5 left-5 z-50 flex items-center justify-center w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg transition-all duration-300 transform hover:bg-blue-600 hover:scale-105"
+      className="fixed bottom-12 left-5 z-50 flex items-center justify-center w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg transition-all duration-300 transform hover:bg-blue-600 hover:scale-105"
       title={`Send an email to ${email}`}
     >
       <FaEnvelope className="w-6 h-6" />
