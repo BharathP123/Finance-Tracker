@@ -1,7 +1,7 @@
 import React from 'react';
 
 const MailButton: React.FC = () => {
-  const email = 'your-email@example.com';  // Update with your actual email
+  const email = 'bharathpersonalai@gmail.com';  // Update with your actual email
 
   return (
     <a
