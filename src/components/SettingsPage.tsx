@@ -5,7 +5,7 @@ import SavingsGoals from './SavingsGoals';
 import ExportManager from './ExportManager';
 import Tools from './Tools';
 import RecurringTransactions from './RecurringTransactions';
-import MailButton from '../components/MailButton';  // Correct the import for MailButton.tsx
+import MailButton from '../components/MailButton';  // Correct import for MailButton.tsx
 
 type SettingsTab = 'goals' | 'recurring' | 'export' | 'tools';  // Removed 'accounts'
 
@@ -82,9 +82,9 @@ const SettingsPage: React.FC = () => {
         {renderContent()}
       </div>
 
-      {/* Mail Button - Move up a little */}
-      <div className="fixed bottom-30 left-5 z-50">
-        <MailButton email="bharathpersonalai@gmail.com" className="fixed bottom-30 left-5 z-50" />
+      {/* Mail Button - Bottom Left Corner */}
+      <div className="fixed bottom-5 left-5 z-50">
+        <MailButton /> {/* Fixed mail button */}
       </div>
     </div>
   );

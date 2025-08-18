@@ -1,13 +1,14 @@
+import React from 'react';
+
 const MailButton: React.FC = () => {
-  const email = 'bharathpersonalai@gmail.com';  // Update with your actual email
+  const email = 'your-email@example.com';  // Update with your actual email
 
   return (
     <a
       href={`mailto:${email}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed left-5 z-50 flex items-center justify-center w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg transition-all duration-300 transform hover:bg-blue-600 hover:scale-105"
-      style={{ bottom: '60px' }}  // Inline style for custom positioning
+      className="fixed bottom-16 left-5 z-50 flex items-center justify-center w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg transition-all duration-300 transform hover:bg-blue-600 hover:scale-105"
       title={`Send an email to ${email}`}
     >
       <svg
