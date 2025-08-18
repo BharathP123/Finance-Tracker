@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
-import { Settings, Wallet, Target, Tag, Download, Calculator, RotateCcw } from 'lucide-react';
+import { Target, Download, Calculator, RotateCcw } from 'lucide-react';  // Removed Wallet (Accounts)
 import CurrencySelector from './CurrencySelector';
-import AccountsManager from './AccountsManager';
 import SavingsGoals from './SavingsGoals';
 import ExportManager from './ExportManager';
 import Tools from './Tools';
 import RecurringTransactions from './RecurringTransactions';
 
-type SettingsTab = 'accounts' | 'goals' | 'recurring' | 'export' | 'tools';
+type SettingsTab = 'goals' | 'recurring' | 'export' | 'tools';  // Removed 'accounts'
 
 const SettingsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<SettingsTab>('accounts');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('goals');  // Default to 'goals'
 
   const tabs = [
-    { id: 'accounts' as const, name: 'Accounts', icon: Wallet },
     { id: 'goals' as const, name: 'Goals', icon: Target },
     { id: 'recurring' as const, name: 'Recurring', icon: RotateCcw },
     { id: 'export' as const, name: 'Export', icon: Download },
     { id: 'tools' as const, name: 'Tools', icon: Calculator },
-  ];
+  ];  // Removed 'accounts' tab
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'accounts':
-        return <AccountsManager />;
       case 'goals':
         return <SavingsGoals />;
       case 'recurring':
@@ -33,7 +29,7 @@ const SettingsPage: React.FC = () => {
       case 'tools':
         return <Tools />;
       default:
-        return <AccountsManager />;
+        return <SavingsGoals />;  // Default to 'goals' if no tab is selected
     }
   };
 
@@ -42,7 +38,7 @@ const SettingsPage: React.FC = () => {
       {/* Header */}
       <div className="text-center py-2">
         <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2">Manage</h1>
-        <p className="text-gray-600 dark:text-gray-400">Manage your accounts, budgets, and preferences</p>
+        <p className="text-gray-600 dark:text-gray-400">Manage your goals, budgets, and preferences</p>
       </div>
 
       {/* Mobile Currency Selector */}
@@ -58,7 +54,7 @@ const SettingsPage: React.FC = () => {
 
       {/* Tab Navigation */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-1 md:p-2 overflow-x-auto">
-        <div className="flex sm:grid sm:grid-cols-5 gap-1 md:gap-2 min-w-max sm:min-w-0">
+        <div className="flex sm:grid sm:grid-cols-4 gap-1 md:gap-2 min-w-max sm:min-w-0"> {/* Changed grid-cols-5 to 4 */}
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;

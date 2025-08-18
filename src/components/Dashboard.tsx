@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, DollarSign, Calendar, Target, PiggyBank } from 'lucide-react';
 import { useTransactions } from '../contexts/TransactionContext';
 import { useCurrency } from '../contexts/CurrencyContext';
@@ -16,6 +16,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onAddTransaction }) => {
   const { 
     getTotalAccountsBalance, 
     getTotalExpenses,
+    getTotalIncome, // Get total income
     getAccountBalance,
     getMonthlyExpenses,
     getMonthlyIncome,
@@ -27,27 +28,34 @@ const Dashboard: React.FC<DashboardProps> = ({ onAddTransaction }) => {
   const hasAccounts = accounts.length > 0;
   const hasRecurringRules = recurringRules.length > 0;
 
-  // Calculate actual available balance from accounts
-  const totalAccountBalance = getTotalAccountsBalance(); // Initial account balances
-  const totalSpent = getTotalExpenses();
-  
-  // Available Balance: ONLY show account balances, NOT affected by transactions when no accounts exist
-  const realAvailableBalance = hasAccounts ? totalAccountBalance : 0;
-  
+  // State for available balance
+  const [availableBalance, setAvailableBalance] = useState<number>(0);
 
-  // Today's spending
-  const today = new Date();
-  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-  const todayEnd = todayStart + 24 * 60 * 60 * 1000;
-  
-  const todaySpending = useTransactions().transactions
-    .filter(t => t.type === 'expense' && t.timestamp >= todayStart && t.timestamp < todayEnd && !t.isPlanned)
-    .reduce((sum, t) => sum + t.amount, 0);
+  useEffect(() => {
+    // Recalculate total income and total expenses when the transactions change
+    const totalIncome = getTotalIncome();  // Get total income
+    const totalSpent = getTotalExpenses(); // Get total expenses
+    
+    // If no income exists, ensure available balance is 0 or only reflect expenses
+    const calculatedAvailableBalance = totalIncome > 0 ? totalIncome - totalSpent : 0;
+
+    // Update the state with the new available balance
+    setAvailableBalance(calculatedAvailableBalance);
+  }, [getTotalIncome, getTotalExpenses, setAvailableBalance]); // Recalculate every time transactions change
 
   // This month's data
   const currentMonth = new Date().toISOString().slice(0, 7);
   const monthlyIncome = getMonthlyIncome(currentMonth);
   const monthlyExpenses = getMonthlyExpenses(currentMonth);
+
+  // Today's spending (confirm only non-planned expenses)
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  const todayEnd = todayStart + 24 * 60 * 60 * 1000;
+
+  const todaySpending = useTransactions().transactions
+    .filter(t => t.type === 'expense' && t.timestamp >= todayStart && t.timestamp < todayEnd && !t.isPlanned)  // Ensure it's a confirmed expense
+    .reduce((sum, t) => sum + t.amount, 0);
 
   return (
     <div className="space-y-6">
@@ -65,56 +73,26 @@ const Dashboard: React.FC<DashboardProps> = ({ onAddTransaction }) => {
       </div>
 
       {/* Main Balance Card */}
-      {hasAccounts ? (
-        <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-4 md:p-6 text-white shadow-lg">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Available Balance</p>
-              <p className="text-2xl md:text-3xl font-bold">
-                {formatCurrency(realAvailableBalance)}
-              </p>
-            </div>
-            <div className="p-3 bg-white/20 rounded-full">
-              <DollarSign className="w-6 h-6" />
-            </div>
+      <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-4 md:p-6 text-white shadow-lg">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-blue-100 text-sm font-medium">Available Balance</p>
+            <p className="text-2xl md:text-3xl font-bold">
+              {formatCurrency(availableBalance)} {/* Updated Available Balance */}
+            </p>
           </div>
-          
-          <div className="grid grid-cols-2 gap-4 md:flex md:justify-between text-sm">
-            <div>
-              <p className="text-blue-100">Total in Accounts</p>
-              <p className="font-semibold">{formatCurrency(totalAccountBalance)}</p>
-            </div>
-            <div className="text-right md:text-right">
-              <p className="text-blue-100">Total Spent</p>
-              <p className="font-semibold">{formatCurrency(totalSpent)}</p>
-            </div>
+          <div className="p-3 bg-white/20 rounded-full">
+            <DollarSign className="w-6 h-6" />
           </div>
         </div>
-      ) : (
-        <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 md:p-6 text-center border-2 border-dashed border-gray-300 dark:border-gray-600 transition-colors duration-200">
-          <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-full w-fit mx-auto mb-4">
-            <PiggyBank className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+        
+        <div className="grid grid-cols-2 gap-4 md:flex md:justify-between text-sm">
+          <div>
+            <p className="text-blue-100">Total Spent</p>
+            <p className="font-semibold">{formatCurrency(getTotalExpenses())}</p> {/* Total Spent */}
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Accounts Added</h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-            Add your wallet, bank account, or any money source to see your available balance
-          </p>
-          <div className="mb-4 p-3 bg-gray-200 dark:bg-gray-700 rounded-lg">
-            <p className="text-xl md:text-2xl font-bold text-gray-500 dark:text-gray-400">₹0.00</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">Available Balance</p>
-          </div>
-          <button
-            onClick={() => {
-              // This would navigate to settings/accounts tab
-              // For now, we'll show a simple message
-              alert('Go to Manage > Accounts to add your first account');
-            }}
-            className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 touch-manipulation min-h-[44px]"
-          >
-            Add Account
-          </button>
         </div>
-      )}
+      </div>
 
       {/* Quick Stats */}
       <QuickStats 
@@ -155,12 +133,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onAddTransaction }) => {
         </div>
       </div>
 
-      {/* Future Projections - Show if user has accounts and recurring rules */}
+      {/* Future Projections */}
       {(hasAccounts || hasRecurringRules) && <FutureProjections />}
       
       {/* Monthly Progress */}
       <MonthlyProgress />
-
 
       {/* Recent Activity */}
       <RecentActivity />

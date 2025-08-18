@@ -597,18 +597,18 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [state.recurringRules]);
 
   const addTransaction = (transaction: Omit<Transaction, 'id' | 'timestamp'>) => {
-    // Ensure precise amount handling - round to 2 decimal places to prevent floating point errors
-    const preciseAmount = Math.round(transaction.amount * 100) / 100;
-    
-    const newTransaction: Transaction = {
-      ...transaction,
-      amount: preciseAmount,
-      id: crypto.randomUUID(),
-      timestamp: Date.now(),
-      amount: Math.round(transaction.amount * 100) / 100, // Fix rounding precision
-    };
-    dispatch({ type: 'ADD_TRANSACTION', payload: newTransaction });
+  const preciseAmount = Math.round(transaction.amount * 100) / 100; // Round the amount to two decimal places
+
+  const newTransaction: Transaction = {
+    ...transaction,
+    amount: preciseAmount, // Correct amount with rounded precision
+    id: crypto.randomUUID(),
+    timestamp: Date.now(),
   };
+
+  dispatch({ type: 'ADD_TRANSACTION', payload: newTransaction }); // Dispatch the action to update state
+};
+ 
 
   const addTransactionWithDate = (transaction: Omit<Transaction, 'id' | 'timestamp'>, customDate?: string) => {
     let timestamp = Date.now();
