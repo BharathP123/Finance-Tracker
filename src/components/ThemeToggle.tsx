@@ -53,7 +53,7 @@ const ThemeToggle = () => {
         `}
       </style>
 
-      <div className="socket w-11 h-10 relative flex items-center justify-center">
+      <div className="socket w-11 h-08 relative flex items-center justify-center"> 
         <button
           onClick={handleToggle}
           className={`theme-button relative w-full h-full flex items-center justify-center transition-transform duration-300 rounded-[1.5rem] shadow-lg ${
