@@ -84,7 +84,7 @@ const SettingsPage: React.FC = () => {
 
       {/* Mail Button - Move up a little */}
       <div className="fixed bottom-30 left-5 z-50">
-        <MailButton email="your-email@example.com" className="fixed bottom-30 left-5 z-50" />
+        <MailButton email="bharathpersonalai@gmail.com" className="fixed bottom-30 left-5 z-50" />
       </div>
     </div>
   );
