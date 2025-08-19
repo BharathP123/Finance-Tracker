@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus, RotateCcw, Target, TrendingUp, ArrowRightLeft, PiggyBank, Download } from 'lucide-react';
 
 interface QuickActionsProps {
@@ -8,6 +8,8 @@ interface QuickActionsProps {
   onTransfer: () => void;
   onViewInsights: () => void;
   onExport: () => void;
+  onAddExpense: () => void;
+  onAddIncome: () => void;
 }
 
 const QuickActions: React.FC<QuickActionsProps> = ({
@@ -17,7 +19,21 @@ const QuickActions: React.FC<QuickActionsProps> = ({
   onTransfer,
   onViewInsights,
   onExport,
+  onAddExpense,
+  onAddIncome,
 }) => {
+  const [categoryType, setCategoryType] = useState<string>('expense'); // track category type
+
+  const handleAddExpense = () => {
+    setCategoryType('expense'); // Set to Expense form
+    onAddExpense(); // Call the Add Expense function
+  };
+
+  const handleAddIncome = () => {
+    setCategoryType('income'); // Set to Income form
+    onAddIncome(); // Call the Add Income function
+  };
+
   const actions = [
     {
       id: 'add-transaction',
@@ -27,6 +43,22 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       textColor: 'text-white',
       onClick: onAddTransaction,
       primary: true,
+    },
+    {
+      id: 'add-expense',
+      name: 'Add Expense',
+      icon: RotateCcw,
+      color: 'bg-green-500 hover:bg-green-600',
+      textColor: 'text-white',
+      onClick: handleAddExpense, // Trigger the expense action
+    },
+    {
+      id: 'add-income',
+      name: 'Add Income',
+      icon: PiggyBank,
+      color: 'bg-yellow-500 hover:bg-yellow-600',
+      textColor: 'text-white',
+      onClick: handleAddIncome, // Trigger the income action
     },
     {
       id: 'add-recurring',
@@ -96,6 +128,15 @@ const QuickActions: React.FC<QuickActionsProps> = ({
             </button>
           );
         })}
+      </div>
+
+      {/* Conditionally render the form based on the categoryType */}
+      <div>
+        {categoryType === 'expense' ? (
+          <div>Add Expense Form - Show expense related form</div>
+        ) : (
+          <div>Add Income Form - Show income related form</div>
+        )}
       </div>
     </div>
   );

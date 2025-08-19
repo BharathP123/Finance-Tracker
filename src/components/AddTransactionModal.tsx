@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, TrendingUp, TrendingDown, Check, RotateCcw, Calendar } from 'lucide-react';
 import { useTransactions } from '../contexts/TransactionContext';
 import { useCurrency } from '../contexts/CurrencyContext';
@@ -6,12 +6,13 @@ import { useCurrency } from '../contexts/CurrencyContext';
 interface AddTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialType: 'expense' | 'income';
 }
 
-const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose }) => {
+const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, initialType }) => {
   const { addTransactionWithDate, addRecurringRule, getCategoriesByType, accounts } = useTransactions();
   const { formatCurrency } = useCurrency();
-  
+
   const [formData, setFormData] = useState({
     type: 'expense' as 'income' | 'expense',
     amount: '',
@@ -28,52 +29,55 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   // Quick amount presets
   const quickAmounts = [100, 500, 1000, 2000, 5000];
 
+  // This useEffect now uses the initialType prop
   React.useEffect(() => {
     if (isOpen) {
-      // Reset form when modal opens
       setFormData({
-        type: 'expense',
+        type: initialType, // Set the type based on the prop
         amount: '',
         description: '',
         category: '',
         accountId: accounts.length > 0 ? accounts[0].id : '',
-        date: new Date().toISOString().split('T')[0], // Reset to today's date
+        date: new Date().toISOString().split('T')[0],
         isRecurring: false,
         recurringInterval: 'monthly',
         recurringEndDate: '',
       });
       setShowSuccess(false);
     }
-  }, [isOpen, accounts]);
+  }, [isOpen, accounts, initialType]); // Added initialType to dependency array
 
   // Set default category when type changes
   React.useEffect(() => {
-    const categories = getCategoriesByType(formData.type);
+    const categories = getCategoriesByType(formData.type); // Get categories based on type
     if (categories.length > 0 && !formData.category) {
-      setFormData(prev => ({ 
-        ...prev, 
-        category: formData.type === 'income' ? 'other-income' : 'other-expense' 
+      setFormData((prev) => ({
+        ...prev,
+        category: formData.type === 'income' ? 'other-income' : 'other-expense', // Default to the correct category
       }));
     }
   }, [formData.type, getCategoriesByType]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.amount || !formData.description.trim() || !formData.category || !formData.accountId || !formData.date) {
+
+    if (
+      !formData.amount ||
+      !formData.description.trim() ||
+      !formData.category ||
+      !formData.accountId ||
+      !formData.date
+    ) {
       return;
     }
 
-    // Parse amount precisely - use parseFloat and let context handle precision
     const amount = parseFloat(formData.amount);
-    
-    // Validate amount is a valid number
+
     if (isNaN(amount) || amount <= 0) {
       return;
     }
-    
+
     if (formData.isRecurring) {
-      // Add recurring rule
       addRecurringRule({
         description: formData.description.trim(),
         amount: amount,
@@ -86,17 +90,18 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
         isActive: true,
       });
     } else {
-      // Add regular transaction
-      addTransactionWithDate({
-        description: formData.description.trim(),
-        amount: amount,
-        type: formData.type,
-        category: formData.category,
-        accountId: formData.accountId,
-      }, formData.date);
+      addTransactionWithDate(
+        {
+          description: formData.description.trim(),
+          amount: amount,
+          type: formData.type,
+          category: formData.category,
+          accountId: formData.accountId,
+        },
+        formData.date,
+      );
     }
 
-    // Show success and close
     setShowSuccess(true);
     setTimeout(() => {
       setShowSuccess(false);
@@ -105,7 +110,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   };
 
   const handleQuickAmount = (amount: number) => {
-    setFormData(prev => ({ ...prev, amount: amount.toString() }));
+    setFormData((prev) => ({ ...prev, amount: amount.toString() }));
   };
 
   if (!isOpen) return null;
@@ -118,7 +123,8 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-10">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Add {formData.isRecurring ? 'Recurring ' : ''}{formData.type === 'income' ? 'Income' : 'Expense'}
+            Add {formData.isRecurring ? 'Recurring ' : ''}
+            {formData.type === 'income' ? 'Income' : 'Expense'}
           </h2>
           <button
             onClick={onClose}
@@ -133,7 +139,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
           <div className="flex bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
             <button
               type="button"
-              onClick={() => setFormData(prev => ({ ...prev, type: 'expense' }))}
+              onClick={() => setFormData((prev) => ({ ...prev, type: 'expense' }))}
               className={`flex-1 flex items-center justify-center space-x-2 py-3 rounded-lg transition-all duration-200 touch-manipulation ${
                 formData.type === 'expense'
                   ? 'bg-white dark:bg-gray-800 text-red-600 dark:text-red-400 shadow-sm'
@@ -145,7 +151,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
             </button>
             <button
               type="button"
-              onClick={() => setFormData(prev => ({ ...prev, type: 'income' }))}
+              onClick={() => setFormData((prev) => ({ ...prev, type: 'income' }))}
               className={`flex-1 flex items-center justify-center space-x-2 py-3 rounded-lg transition-all duration-200 touch-manipulation ${
                 formData.type === 'income'
                   ? 'bg-white dark:bg-gray-800 text-green-600 dark:text-green-400 shadow-sm'
@@ -172,7 +178,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
               <input
                 type="checkbox"
                 checked={formData.isRecurring}
-                onChange={(e) => setFormData(prev => ({ ...prev, isRecurring: e.target.checked }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, isRecurring: e.target.checked }))}
                 className="sr-only peer"
               />
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -181,13 +187,11 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
 
           {/* Amount */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Amount
-            </label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Amount</label>
             <input
               type="number"
               value={formData.amount}
-              onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, amount: e.target.value }))}
               placeholder="0.00"
               className="w-full px-4 py-3 text-lg border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px]"
               step="any"
@@ -195,7 +199,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
               required
               inputMode="decimal"
             />
-            
+
             {/* Quick Amount Buttons */}
             <div className="grid grid-cols-5 gap-2 mt-3">
               {quickAmounts.map((amount) => (
@@ -213,13 +217,11 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Description
-            </label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
             <input
               type="text"
               value={formData.description}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
               placeholder={formData.type === 'income' ? 'e.g., Salary, Freelance work' : 'e.g., Groceries, Coffee, Uber'}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px]"
               required
@@ -234,7 +236,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
             <input
               type="date"
               value={formData.date}
-              onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, date: e.target.value }))}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px]"
               required
             />
@@ -247,14 +249,14 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
                 <RotateCcw className="w-4 h-4" />
                 <span>Recurring Settings</span>
               </h3>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Repeat Every
                 </label>
                 <select
                   value={formData.recurringInterval}
-                  onChange={(e) => setFormData(prev => ({ ...prev, recurringInterval: e.target.value as any }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, recurringInterval: e.target.value as any }))}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px]"
                 >
                   <option value="daily">Daily</option>
@@ -271,7 +273,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
                 <input
                   type="date"
                   value={formData.recurringEndDate}
-                  onChange={(e) => setFormData(prev => ({ ...prev, recurringEndDate: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, recurringEndDate: e.target.value }))}
                   min={formData.date}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px]"
                 />
@@ -283,12 +285,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
           )}
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Category
-            </label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
             <select
               value={formData.category}
-              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, category: e.target.value }))}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px]"
               required
             >
@@ -303,12 +303,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
 
           {/* Account */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Account
-            </label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Account</label>
             <select
               value={formData.accountId}
-              onChange={(e) => setFormData(prev => ({ ...prev, accountId: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, accountId: e.target.value }))}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px]"
               required
             >
@@ -324,7 +322,13 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={!formData.amount || !formData.description.trim() || !formData.category || !formData.accountId || !formData.date}
+            disabled={
+              !formData.amount ||
+              !formData.description.trim() ||
+              !formData.category ||
+              !formData.accountId ||
+              !formData.date
+            }
             className="w-full py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-gray-400 text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 disabled:cursor-not-allowed touch-manipulation min-h-[52px]"
           >
             {showSuccess ? (
