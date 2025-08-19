@@ -10,6 +10,8 @@ import FutureProjections from './FutureProjections';
 import AddTransactionModal from './AddTransactionModal';
 
 const Dashboard: React.FC = () => {
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  // ... rest of your state variables
   const {
     getTotalAccountsBalance,
     getTotalExpenses,
@@ -31,9 +33,10 @@ const Dashboard: React.FC = () => {
 
   // Function to open the modal with a specific type
   const onAddTransaction = (type: 'expense' | 'income') => {
-    setAddTransactionType(type);
-    setIsAddTransactionModalOpen(true);
-  };
+  setAddTransactionType(type);
+  setIsAddTransactionModalOpen(true);
+  setIsNavVisible(false); // Hide the navigation bar
+};
 
   // State for available balance
   const [availableBalance, setAvailableBalance] = useState<number>(0);
